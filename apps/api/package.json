@@ -1,0 +1,17 @@
+{
+  "name": "@saas/api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
+  "devDependencies": {
+    "@saas/auth": "workspace:*",
+    "@saas/eslint-config": "workspace:*",
+    "@saas/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "tsx": "^4.21.0"
+  },
+  "eslintConfig": {
+    "extends": "@saas/eslint-config/base.json"
+  }
+}
