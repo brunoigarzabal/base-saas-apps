@@ -22,6 +22,8 @@ import {
   authenticateWithGithubRoute,
 } from './routes/auth'
 
+import { createOrganizationRoute } from './routes/organizations'
+
 import { errorHandler } from './error-handler'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -67,6 +69,8 @@ app.register(createAccountRoute)
 app.register(getProfileRoute)
 app.register(getRequestPasswordRecoverRoute)
 app.register(resetPasswordRoute)
+
+app.register(createOrganizationRoute)
 
 app
   .listen({
