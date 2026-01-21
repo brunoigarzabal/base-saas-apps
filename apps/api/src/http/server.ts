@@ -2,6 +2,7 @@ import { fastify } from 'fastify'
 
 import fastifyCors from '@fastify/cors'
 import fastifySwagger from '@fastify/swagger'
+import fastifyJwt from '@fastify/jwt'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import {
   jsonSchemaTransform,
@@ -10,7 +11,7 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
-import { createAccountRoute } from './routes/auth'
+import { createAccountRoute, authenticateWithPassword } from './routes/auth'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -33,9 +34,14 @@ app.register(fastifySwaggerUI, {
   routePrefix: '/docs',
 })
 
+app.register(fastifyJwt, {
+  secret: 'my-jwt-secret-key',
+})
+
 app.register(fastifyCors)
 
 app.register(createAccountRoute)
+app.register(authenticateWithPassword)
 
 app
   .listen({
