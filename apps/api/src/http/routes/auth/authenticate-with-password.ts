@@ -7,6 +7,8 @@ import argon2 from 'argon2'
 
 import { prisma } from '@/lib/prisma'
 
+import { BadRequestError } from '../_errors'
+
 export async function authenticateWithPasswordRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions/password',
@@ -22,9 +24,6 @@ export async function authenticateWithPasswordRoute(app: FastifyInstance) {
           201: z.object({
             token: z.string(),
           }),
-          400: z.object({
-            message: z.string(),
-          }),
         },
       },
     },
@@ -38,15 +37,13 @@ export async function authenticateWithPasswordRoute(app: FastifyInstance) {
       })
 
       if (!userFromEmail) {
-        return reply.status(400).send({
-          message: 'Invalid credentials',
-        })
+        throw new BadRequestError('Invalid credentials')
       }
 
       if (userFromEmail.passwordHash === null) {
-        return reply.status(400).send({
-          message: 'User does not have a password, use social login',
-        })
+        throw new BadRequestError(
+          'User does not have a password, use social login'
+        )
       }
 
       const isPasswordValid = await argon2.verify(
@@ -55,9 +52,7 @@ export async function authenticateWithPasswordRoute(app: FastifyInstance) {
       )
 
       if (!isPasswordValid) {
-        return reply.status(400).send({
-          message: 'Invalid credentials',
-        })
+        throw new BadRequestError('Invalid credentials')
       }
 
       const token = await reply.jwtSign(

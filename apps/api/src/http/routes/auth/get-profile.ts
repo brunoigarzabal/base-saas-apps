@@ -3,9 +3,9 @@ import { z } from 'zod'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import argon2 from 'argon2'
-
 import { prisma } from '@/lib/prisma'
+
+import { BadRequestError } from '../_errors'
 
 export async function getProfileRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -42,7 +42,7 @@ export async function getProfileRoute(app: FastifyInstance) {
       })
 
       if (!user) {
-        throw new Error('User not found')
+        throw new BadRequestError('User not found')
       }
 
       return reply.status(200).send({ user })
