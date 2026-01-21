@@ -12,6 +12,9 @@ export function createAccountRoute(app: FastifyInstance) {
     '/users',
     {
       schema: {
+        tags: ['Auth'],
+        summary: 'Create a new account',
+        description: 'Create a new account',
         body: z.object({
           name: z.string(),
           email: z.email(),
@@ -34,6 +37,14 @@ export function createAccountRoute(app: FastifyInstance) {
           .send({ message: 'User with same email already exists' })
       }
 
+      const [, domain] = email.split('@')
+      const autoJoinOrganization = await prisma.organization.findFirst({
+        where: {
+          domain,
+          shouldAttachUserByDomain: true,
+        },
+      })
+
       const passwordHash = await argon2.hash(password)
 
       const user = await prisma.user.create({
@@ -41,6 +52,13 @@ export function createAccountRoute(app: FastifyInstance) {
           name,
           email,
           passwordHash,
+          member_on: autoJoinOrganization
+            ? {
+                create: {
+                  organizationId: autoJoinOrganization.id,
+                },
+              }
+            : undefined,
         },
       })
 

@@ -41,7 +41,7 @@ async function seed() {
     },
   })
 
-  const organization1 = await prisma.organization.create({
+  await prisma.organization.create({
     data: {
       name: 'Acme Inc (Admin)',
       domain: 'acme.com',
@@ -100,7 +100,7 @@ async function seed() {
     },
   })
 
-  const organization2 = await prisma.organization.create({
+  await prisma.organization.create({
     data: {
       name: 'Acme Inc (Member)',
       slug: 'acme-member',
@@ -157,7 +157,7 @@ async function seed() {
     },
   })
 
-  const organization3 = await prisma.organization.create({
+  await prisma.organization.create({
     data: {
       name: 'Acme Inc (Billing)',
       slug: 'acme-billing',
