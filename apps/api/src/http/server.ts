@@ -11,7 +11,11 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
-import { createAccountRoute, authenticateWithPassword } from './routes/auth'
+import {
+  createAccountRoute,
+  authenticateWithPasswordRoute,
+  getProfileRoute,
+} from './routes/auth'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -41,7 +45,8 @@ app.register(fastifyJwt, {
 app.register(fastifyCors)
 
 app.register(createAccountRoute)
-app.register(authenticateWithPassword)
+app.register(authenticateWithPasswordRoute)
+app.register(getProfileRoute)
 
 app
   .listen({

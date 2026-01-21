@@ -1,0 +1,51 @@
+import { z } from 'zod'
+
+import { FastifyInstance } from 'fastify'
+import { ZodTypeProvider } from 'fastify-type-provider-zod'
+
+import argon2 from 'argon2'
+
+import { prisma } from '@/lib/prisma'
+
+export async function getProfileRoute(app: FastifyInstance) {
+  app.withTypeProvider<ZodTypeProvider>().get(
+    '/profile',
+    {
+      schema: {
+        tags: ['Auth'],
+        summary: 'Get authenticated user profile',
+        response: {
+          200: z.object({
+            user: z.object({
+              id: z.uuid(),
+              name: z.string().nullable(),
+              email: z.email(),
+              avatarUrl: z.url().nullable(),
+            }),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { sub } = await request.jwtVerify<{ sub: string }>()
+
+      const user = await prisma.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          avatarUrl: true,
+        },
+        where: {
+          id: sub,
+        },
+      })
+
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      return reply.status(200).send({ user })
+    }
+  )
+}

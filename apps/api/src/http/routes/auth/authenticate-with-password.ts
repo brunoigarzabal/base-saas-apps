@@ -7,7 +7,7 @@ import argon2 from 'argon2'
 
 import { prisma } from '@/lib/prisma'
 
-export async function authenticateWithPassword(app: FastifyInstance) {
+export async function authenticateWithPasswordRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
     '/sessions/password',
     {
@@ -18,6 +18,14 @@ export async function authenticateWithPassword(app: FastifyInstance) {
           email: z.email(),
           password: z.string(),
         }),
+        response: {
+          201: z.object({
+            token: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
