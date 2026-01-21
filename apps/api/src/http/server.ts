@@ -11,12 +11,15 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
+import { env } from '@saas/env'
+
 import {
   createAccountRoute,
   authenticateWithPasswordRoute,
   getProfileRoute,
   getRequestPasswordRecoverRoute,
   resetPasswordRoute,
+  authenticateWithGithubRoute,
 } from './routes/auth'
 
 import { errorHandler } from './error-handler'
@@ -35,7 +38,15 @@ app.register(fastifySwagger, {
       description: 'Full-stack SaaS app with multi-tenant & RBAC.',
       version: '1.0.0',
     },
-    servers: [],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'Bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   transform: jsonSchemaTransform,
 })
@@ -45,21 +56,22 @@ app.register(fastifySwaggerUI, {
 })
 
 app.register(fastifyJwt, {
-  secret: 'my-jwt-secret-key',
+  secret: env.JWT_SECRET,
 })
 
 app.register(fastifyCors)
 
-app.register(createAccountRoute)
 app.register(authenticateWithPasswordRoute)
+app.register(authenticateWithGithubRoute)
+app.register(createAccountRoute)
 app.register(getProfileRoute)
 app.register(getRequestPasswordRecoverRoute)
 app.register(resetPasswordRoute)
 
 app
   .listen({
-    port: 3333,
+    port: env.SERVER_PORT,
   })
   .then(() => {
-    console.log('HTTP server running on :3333')
+    console.log(`HTTP server running on :${env.SERVER_PORT}`)
   })
