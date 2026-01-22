@@ -22,7 +22,12 @@ import {
   authenticateWithGithubRoute,
 } from './routes/auth'
 
-import { createOrganizationRoute } from './routes/organizations'
+import {
+  createOrganizationRoute,
+  getMembershipRoute,
+  getOrganizationRoute,
+  getOrganizationsRoute,
+} from './routes/organizations'
 
 import { errorHandler } from './error-handler'
 
@@ -71,6 +76,9 @@ app.register(getRequestPasswordRecoverRoute)
 app.register(resetPasswordRoute)
 
 app.register(createOrganizationRoute)
+app.register(getMembershipRoute)
+app.register(getOrganizationsRoute)
+app.register(getOrganizationRoute)
 
 app
   .listen({
