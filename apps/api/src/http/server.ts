@@ -28,6 +28,7 @@ import {
   getOrganizationRoute,
   getOrganizationsRoute,
   updateOrganizationRoute,
+  shutdownOrganizationRoute,
 } from './routes/organizations'
 
 import { errorHandler } from './error-handler'
@@ -81,6 +82,7 @@ app.register(getMembershipRoute)
 app.register(getOrganizationsRoute)
 app.register(getOrganizationRoute)
 app.register(updateOrganizationRoute)
+app.register(shutdownOrganizationRoute)
 
 app
   .listen({
