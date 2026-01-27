@@ -46,6 +46,16 @@ import {
   updateMemberRoute,
 } from './routes/members'
 
+import {
+  acceptInviteRoute,
+  createInviteRoute,
+  getInviteRoute,
+  getInvitesRoute,
+  getPendingInvitesRoute,
+  rejectInviteRoute,
+  revokeInviteRoute,
+} from './routes/invites'
+
 import { errorHandler } from './error-handler'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -109,6 +119,14 @@ app.register(updateProjectRoute)
 app.register(getMembersRoute)
 app.register(updateMemberRoute)
 app.register(removeMemberRoute)
+
+app.register(createInviteRoute)
+app.register(getInviteRoute)
+app.register(getInvitesRoute)
+app.register(acceptInviteRoute)
+app.register(rejectInviteRoute)
+app.register(revokeInviteRoute)
+app.register(getPendingInvitesRoute)
 
 app
   .listen({
