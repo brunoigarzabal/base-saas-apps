@@ -40,6 +40,12 @@ import {
   updateProjectRoute,
 } from './routes/projects'
 
+import {
+  getMembersRoute,
+  removeMemberRoute,
+  updateMemberRoute,
+} from './routes/members'
+
 import { errorHandler } from './error-handler'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -99,6 +105,10 @@ app.register(deleteProjectRoute)
 app.register(getProjectRoute)
 app.register(getProjectsRoute)
 app.register(updateProjectRoute)
+
+app.register(getMembersRoute)
+app.register(updateMemberRoute)
+app.register(removeMemberRoute)
 
 app
   .listen({
