@@ -22,7 +22,7 @@ export async function transferOrganizationRoute(app: FastifyInstance) {
           summary: 'Transfer organization ownership',
           security: [{ bearerAuth: [] }],
           body: z.object({
-            transferToUserId: z.string().uuid(),
+            transferToUserId: z.uuid(),
           }),
           params: z.object({
             slug: z.string(),
