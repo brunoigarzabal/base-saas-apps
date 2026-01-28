@@ -35,6 +35,6 @@
     "zod": "^4.3.5"
   },
   "eslintConfig": {
-    "extends": "@saas/eslint-config/base.json"
+    "extends": "@saas/eslint-config/base.js"
   }
 }
