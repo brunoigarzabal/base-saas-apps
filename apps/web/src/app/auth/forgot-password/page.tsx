@@ -3,9 +3,6 @@ import Link from 'next/link'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-
-import { GithubIcon } from '@/assets'
 
 export default function ForgotPasswordPage() {
   return (
